@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ElderEase — Simple Assistance for Seniors</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <meta name="description" content="ElderEase is a simple, accessible assistance platform for elderly individuals to manage doctor appointments, nutrition, hydration, and learn UPI digital payments safely.">
+</head>
+<body class="font-normal">
+
+  <!-- =========================================================
+       APP HEADER & ACCESSIBILITY CONTROLS
+       ========================================================= -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="brand-wrapper">
+        <span class="brand-logo-icon" aria-hidden="true">🌱</span>
+        <div>
+          <h1 class="brand-title">ElderEase</h1>
+          <p class="brand-tagline">Simple care for everyday life</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <!-- Font Size Scaler for Elderly Eyes -->
+        <div class="font-size-control" aria-label="Adjust text size">
+          <span style="font-weight: 700; font-size: 0.95rem; margin-right: 4px; padding-left: 6px;">Text:</span>
+          <button type="button" class="font-btn active" data-size="font-normal" title="Normal text size">A</button>
+          <button type="button" class="font-btn" data-size="font-large" title="Large text size">A+</button>
+          <button type="button" class="font-btn" data-size="font-xlarge" title="Extra large text size">A++</button>
+        </div>
+
+        <!-- High Contrast Mode Toggle -->
+        <button type="button" class="contrast-toggle-btn" id="toggleContrastBtn" title="Switch high contrast mode">
+          <span>🌓</span> High Contrast
+        </button>
+
+        <!-- Emergency Helpline Button -->
+        <button type="button" class="emergency-quick-btn" id="openEmergencyBtn" title="View Emergency Helpline numbers">
+          <span>🆘</span> Emergency Call
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="header-nav" aria-label="Main Navigation">
+      <div class="nav-container">
+        <button type="button" class="nav-tab-btn active" data-tab="home" id="navTabHome" aria-selected="true">
+          <span>🏠</span> Home
+        </button>
+        <button type="button" class="nav-tab-btn" data-tab="appointments" id="navTabAppointments" aria-selected="false">
+          <span>📅</span> Appointments
+        </button>
+        <button type="button" class="nav-tab-btn" data-tab="nutrition" id="navTabNutrition" aria-selected="false">
+          <span>🍎</span> Nutrition & Water
+        </button>
+        <button type="button" class="nav-tab-btn" data-tab="learn-upi" id="navTabUpi" aria-selected="false">
+          <span>📱</span> Learn UPI
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- =========================================================
+       MAIN CONTENT CONTAINER
+       ========================================================= -->
+  <main class="main-content">
+
+    <!-- =======================================================
+         TAB 1: HOME DASHBOARD
+         ======================================================= -->
+    <section class="tab-panel active" id="tab-home" aria-labelledby="navTabHome">
+      <!-- Welcome Greeting Banner -->
+      <div class="welcome-banner">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h2 class="welcome-greeting" id="dashboardGreeting">GOOD MORNING 👋, Dadaji</h2>
+            <p class="welcome-prompt">How can we help you today? Tap any of the big buttons below.</p>
+          </div>
+          <div>
+            <button type="button" class="btn btn-secondary" id="editSeniorNameBtn" style="background: rgba(255,255,255,0.9); border: none; font-size: 1rem; padding: 8px 16px;">
+              ✏️ Change Name
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action 4 Big Cards Grid -->
+      <div class="quick-action-grid">
+        <div class="quick-card" data-nav-target="appointments" role="button" tabindex="0">
+          <div>
+            <div class="quick-card-icon">📅</div>
+            <h3 class="quick-card-title">Appointments</h3>
+            <p class="quick-card-desc">Check upcoming doctor visits, clinics, and hospital schedules.</p>
+          </div>
+          <div class="quick-card-action">Open Calendar ➔</div>
+        </div>
+
+        <div class="quick-card" data-nav-target="nutrition" role="button" tabindex="0">
+          <div>
+            <div class="quick-card-icon">🍎</div>
+            <h3 class="quick-card-title">Nutrition</h3>
+            <p class="quick-card-desc">Track breakfast, lunch, dinner, snacks, and daily meals.</p>
+          </div>
+          <div class="quick-card-action">View Meals ➔</div>
+        </div>
+
+        <div class="quick-card" data-nav-target="nutrition" role="button" tabindex="0">
+          <div>
+            <div class="quick-card-icon">💧</div>
+            <h3 class="quick-card-title">Water Tracker</h3>
+            <p class="quick-card-desc">Keep your body hydrated by tracking your daily 8 glasses.</p>
+          </div>
+          <div class="quick-card-action">Track Water ➔</div>
+        </div>
+
+        <div class="quick-card" data-nav-target="learn-upi" role="button" tabindex="0">
+          <div>
+            <div class="quick-card-icon">📱</div>
+            <h3 class="quick-card-title">Learn UPI</h3>
+            <p class="quick-card-desc">Simple step-by-step guides for sending money and avoiding fraud.</p>
+          </div>
+          <div class="quick-card-action">Start Tutorial ➔</div>
+        </div>
+      </div>
+
+      <!-- Live Summary Section (Upcoming Appointment & Nutrition Today) -->
+      <h3 class="section-title">📊 Today's Overview</h3>
+      <p class="section-subtitle">A quick look at your schedule and daily health progress</p>
+
+      <div class="dashboard-summary-grid">
+        <!-- Upcoming Appointment Summary Card -->
+        <div class="summary-card">
+          <div class="summary-header">
+            <h4 class="summary-title"><span>🩺</span> Upcoming Doctor Visit</h4>
+            <span class="water-badge" style="background:#e0e7ff; color:#3730a3;">Schedule</span>
+          </div>
+          <div class="summary-content" id="dashUpcomingAppContainer">
+            <div class="empty-summary-box">Loading upcoming appointment...</div>
+          </div>
+        </div>
+
+        <!-- Today's Nutrition & Water Summary Card -->
+        <div class="summary-card">
+          <div class="summary-header">
+            <h4 class="summary-title"><span>🥗</span> Today's Nutrition & Water</h4>
+            <span class="water-badge">Daily Health</span>
+          </div>
+          <div class="summary-content" id="dashNutritionContainer">
+            <div class="empty-summary-box">Loading today's nutrition...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UPI Safety Highlight Card -->
+      <div class="safety-highlight-card">
+        <div class="safety-highlight-text">
+          <span style="font-size: 1.5rem; margin-right: 8px;">🛡️</span>
+          <strong>Elder Safety Tip:</strong> Your bank will <u>NEVER</u> ask for your secret UPI PIN or SMS OTP. Entering your PIN sends money out, never brings money in!
+        </div>
+        <button type="button" class="btn btn-primary" onclick="ElderEase.switchTab('learn-upi')">
+          📱 Read UPI Safety Rules
+        </button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         TAB 2: APPOINTMENT CALENDAR
+         ======================================================= -->
+    <section class="tab-panel" id="tab-appointments" aria-labelledby="navTabAppointments">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+        <div>
+          <h2 class="section-title"><span>📅</span> Doctor Appointment Calendar</h2>
+          <p class="section-subtitle" style="margin-bottom: 0;">Select a date to view or schedule doctor appointments.</p>
+        </div>
+        <button type="button" class="btn btn-primary btn-lg" id="openAddAppBtn">
+          <span>➕</span> Add New Appointment
+        </button>
+      </div>
+
+      <div class="appointment-layout">
+        <!-- Monthly Calendar View -->
+        <div class="calendar-box">
+          <!-- Calendar Nav Bar -->
+          <div class="calendar-nav-bar">
+            <button type="button" class="btn btn-secondary" id="calPrevMonthBtn" title="Previous month">
+              ◀ Previous
+            </button>
+            <h3 class="calendar-month-label" id="calMonthYearLabel">October 2026</h3>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn btn-secondary" id="calTodayBtn" title="Go to current month">
+                Today
+              </button>
+              <button type="button" class="btn btn-secondary" id="calNextMonthBtn" title="Next month">
+                Next ▶
+              </button>
+            </div>
+          </div>
+
+          <!-- Calendar Table -->
+          <table class="calendar-table" aria-label="Monthly Calendar">
+            <thead>
+              <tr>
+                <th class="calendar-th" scope="col">Sun</th>
+                <th class="calendar-th" scope="col">Mon</th>
+                <th class="calendar-th" scope="col">Tue</th>
+                <th class="calendar-th" scope="col">Wed</th>
+                <th class="calendar-th" scope="col">Thu</th>
+                <th class="calendar-th" scope="col">Fri</th>
+                <th class="calendar-th" scope="col">Sat</th>
+              </tr>
+            </thead>
+            <tbody id="calendarBody">
+              <!-- Dynamically populated by calendar.js -->
+            </tbody>
+          </table>
+
+          <div style="display: flex; align-items: center; gap: 16px; margin-top: 16px; font-size: 0.95rem; color: var(--color-text-muted); flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="display:inline-block; width:14px; height:14px; border:2px solid var(--color-primary); background:#eff6ff; border-radius:4px;"></span>
+              <span>Today</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="display:inline-block; width:14px; height:14px; background:var(--color-primary); border-radius:4px;"></span>
+              <span>Selected Day</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="display:inline-block; width:8px; height:8px; background:#dc2626; border-radius:50%;"></span>
+              <span>Has Appointment</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selected Date & Appointments List Side Panel -->
+        <div class="appointment-list-panel">
+          <div class="date-selected-header">
+            <div>
+              <div style="font-size: 0.95rem; font-weight: 700; color: var(--color-text-muted);">SELECTED DATE</div>
+              <h3 class="date-selected-title" id="selectedDayTitle">Today</h3>
+            </div>
+          </div>
+
+          <!-- Appointments on Selected Date -->
+          <div id="dayAppointmentsList">
+            <!-- Dynamically populated by calendar.js -->
+          </div>
+
+          <!-- Upcoming Appointments List at a Glance -->
+          <div class="card" style="margin-top: 12px;">
+            <h4 class="card-title"><span>📋</span> All Upcoming Visits at a Glance</h4>
+            <div id="upcomingAppointmentsList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         TAB 3: NUTRITION & WATER TRACKER
+         ======================================================= -->
+    <section class="tab-panel" id="tab-nutrition" aria-labelledby="navTabNutrition">
+      <!-- Date Navigator -->
+      <div class="nutrition-date-navigator">
+        <button type="button" class="btn btn-secondary" id="nutrPrevDayBtn">
+          ◀ Previous Day
+        </button>
+        <h2 class="nutrition-date-label" id="nutrDateDisplay">Today</h2>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn btn-secondary" id="nutrTodayBtn">
+            Jump to Today
+          </button>
+          <button type="button" class="btn btn-secondary" id="nutrNextDayBtn">
+            Next Day ▶
+          </button>
+        </div>
+      </div>
+
+      <!-- Big Water Tracker Section -->
+      <div class="water-tracker-card">
+        <h3 style="font-size: 1.8rem; font-weight: 850; color: #0369a1; margin-bottom: 4px;">
+          💧 Daily Water Intake
+        </h3>
+        <p class="water-goal-subtext">Drinking water regularly keeps your joints healthy and energy high</p>
+
+        <div class="water-counter-display" id="waterCounterNum">0 / 8 Glasses</div>
+
+        <!-- Visual Droplets Container -->
+        <div class="water-droplets-container" id="waterDropletsBox">
+          <!-- Dynamically filled with water glasses -->
+        </div>
+
+        <!-- Big Touch Action Buttons -->
+        <div class="water-actions-bar">
+          <button type="button" class="btn btn-primary btn-lg" id="addWaterGlassBtn">
+            <span>💧</span> + Add 1 Glass
+          </button>
+          <button type="button" class="btn btn-secondary btn-lg" id="removeWaterGlassBtn">
+            <span>➖</span> Remove 1 Glass
+          </button>
+        </div>
+
+        <div class="water-feedback-msg" id="waterFeedbackText">
+          Start your morning with a glass of fresh water!
+        </div>
+      </div>
+
+      <!-- Meal Tracker Section -->
+      <h3 class="section-title"><span>🍲</span> Today's Meals</h3>
+      <p class="section-subtitle">Tap the green button when you have finished your meal, and save what you ate.</p>
+
+      <div class="meals-grid">
+        <!-- Breakfast Card -->
+        <div class="meal-card" id="mealCard_breakfast">
+          <!-- Populated by nutrition.js -->
+        </div>
+
+        <!-- Lunch Card -->
+        <div class="meal-card" id="mealCard_lunch">
+          <!-- Populated by nutrition.js -->
+        </div>
+
+        <!-- Dinner Card -->
+        <div class="meal-card" id="mealCard_dinner">
+          <!-- Populated by nutrition.js -->
+        </div>
+
+        <!-- Evening Snacks Card -->
+        <div class="meal-card" id="mealCard_snacks">
+          <!-- Populated by nutrition.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         TAB 4: LEARN UPI TUTORIALS
+         ======================================================= -->
+    <section class="tab-panel" id="tab-learn-upi" aria-labelledby="navTabUpi">
+      <div style="margin-bottom: 28px;">
+        <h2 class="section-title"><span>📱</span> Learn UPI Digital Payments</h2>
+        <p class="section-subtitle">
+          Simple step-by-step lessons created specifically for seniors. Learn how to send money, scan QR codes, and protect yourself from fraud.
+        </p>
+      </div>
+
+      <!-- Interactive Step-by-Step Player (Hidden until a tutorial card is clicked) -->
+      <div class="tutorial-player-container" id="upiPlayerContainer">
+        <div class="tutorial-player-header">
+          <div>
+            <h3 style="font-size: 1.5rem; font-weight: 850; color: var(--color-primary);" id="upiPlayerTitle">
+              💸 How to Send Money
+            </h3>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="tutorial-step-indicator" id="upiStepBadge">Step 1 of 4</span>
+            <button type="button" class="btn btn-secondary" id="upiSpeakBtn" title="Listen to this step spoken aloud">
+              🔊 Read Step Aloud
+            </button>
+            <button type="button" class="btn btn-secondary" id="upiClosePlayerBtn" title="Close this tutorial">
+              ✕ Close Guide
+            </button>
+          </div>
+        </div>
+
+        <!-- Active Step Card -->
+        <div class="step-card">
+          <!-- Left: Instructions & Tips -->
+          <div class="step-text-content">
+            <h4 class="step-headline" id="stepHeadline">Step 1: Open Your UPI App</h4>
+            <p class="step-instruction" id="stepInstruction">
+              Open your preferred UPI app on your phone (Google Pay, PhonePe, Paytm, or BHIM).
+            </p>
+            <div class="step-tip" id="stepTipBox">
+              <span>💡</span> <span id="stepTipText">Tip: Sit comfortably before making payments.</span>
+            </div>
+          </div>
+
+          <!-- Right: Simulated Smartphone Mockup Illustration -->
+          <div class="step-mockup-screen" id="stepMockupGraphic">
+            <div class="mockup-inner-badge">Step Screen Mockup</div>
+            <div class="mockup-icon">📱</div>
+            <div class="mockup-title">Google Pay / PhonePe</div>
+            <div class="mockup-subtext">ElderEase Interactive Tutorial</div>
+          </div>
+        </div>
+
+        <!-- Navigation Bar for Steps -->
+        <div class="step-navigation-bar">
+          <button type="button" class="btn btn-secondary btn-lg" id="upiPrevStepBtn">
+            ◀ Previous Step
+          </button>
+          <button type="button" class="btn btn-primary btn-lg" id="upiNextStepBtn">
+            Next Step ▶
+          </button>
+        </div>
+      </div>
+
+      <!-- Tutorial Catalogue Grid (4 Major Guides) -->
+      <div class="upi-catalog-grid">
+        <!-- 1. Send Money -->
+        <div class="upi-topic-card" data-tutorial-key="send_money" role="button" tabindex="0">
+          <div>
+            <div class="upi-topic-icon">💸</div>
+            <h3 class="upi-topic-title">How to Send Money</h3>
+            <p class="upi-topic-desc">Learn how to send money to your family, children, or friends using their phone number in 4 simple steps.</p>
+          </div>
+          <button type="button" class="btn btn-primary btn-block">
+            Start Lesson (4 Steps) ➔
+          </button>
+        </div>
+
+        <!-- 2. Scan QR Code -->
+        <div class="upi-topic-card" data-tutorial-key="scan_qr" role="button" tabindex="0">
+          <div>
+            <div class="upi-topic-icon">📷</div>
+            <h3 class="upi-topic-title">How to Scan QR Code</h3>
+            <p class="upi-topic-desc">Learn how to point your camera and pay at local grocery stores, pharmacies, and vegetable shops safely.</p>
+          </div>
+          <button type="button" class="btn btn-primary btn-block">
+            Start Lesson (4 Steps) ➔
+          </button>
+        </div>
+
+        <!-- 3. Receive Money Safely -->
+        <div class="upi-topic-card" data-tutorial-key="receive_money" role="button" tabindex="0">
+          <div>
+            <div class="upi-topic-icon">📥</div>
+            <h3 class="upi-topic-title">How to Receive Money</h3>
+            <p class="upi-topic-desc">Understand how money is received into your account. Remember: You NEVER need a PIN to receive money.</p>
+          </div>
+          <button type="button" class="btn btn-primary btn-block">
+            Start Lesson (3 Steps) ➔
+          </button>
+        </div>
+
+        <!-- 4. UPI Safety Rules -->
+        <div class="upi-topic-card" data-tutorial-key="safety_rules" role="button" tabindex="0">
+          <div>
+            <div class="upi-topic-icon">🛡️</div>
+            <h3 class="upi-topic-title">UPI Safety Rules</h3>
+            <p class="upi-topic-desc">The most important rules every senior must follow to never fall prey to phone frauds and scams.</p>
+          </div>
+          <button type="button" class="btn btn-primary btn-block">
+            Start Lesson (4 Steps) ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- Dedicated UPI Safety Guide Section -->
+      <div class="upi-safety-section">
+        <h3 class="safety-card-title">
+          <span>🚨</span> Golden Rules for UPI Safety (Read Carefully)
+        </h3>
+        <ul class="safety-rules-list">
+          <li class="safety-rule-item">
+            <span class="safety-rule-icon">⛔</span>
+            <div>
+              <strong>GOLDEN RULE:</strong> Entering your secret UPI PIN sends money <u>OUT</u> of your bank account. You <u>NEVER</u> need to enter your PIN or scan a QR code to receive money!
+            </div>
+          </li>
+          <li class="safety-rule-item">
+            <span class="safety-rule-icon">🔒</span>
+            <div>
+              <strong>NEVER Share Your PIN or OTP:</strong> Bank managers, police, or customer care will NEVER ask for your UPI PIN or SMS OTP over the phone.
+            </div>
+          </li>
+          <li class="safety-rule-item">
+            <span class="safety-rule-icon">🚫</span>
+            <div>
+              <strong>Beware of Lottery or Pension Links:</strong> Never click strange links sent on WhatsApp or SMS claiming you have won money or need to pay electricity bills urgently.
+            </div>
+          </li>
+          <li class="safety-rule-item">
+            <span class="safety-rule-icon">📞</span>
+            <div>
+              <strong>When in Doubt, Ask Family:</strong> If you feel hurried or confused, stop immediately and call your family member or the Cyber Helpline at <strong>1930</strong>.
+            </div>
+          </li>
+        </ul>
+
+        <!-- Interactive Safety Quiz for Comprehension -->
+        <div class="card" style="margin-top: 24px; background: #ffffff;">
+          <h4 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 8px;">
+            🧠 Quick Knowledge Check for Seniors
+          </h4>
+          <p style="font-size: 1.15rem; color: var(--color-text-muted); margin-bottom: 16px;">
+            Question: Someone calls and says "To receive your ₹1,500 pension bonus, please scan this QR code and enter your UPI PIN." What should you do?
+          </p>
+
+          <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-success" data-safety-answer="correct">
+              ✅ Do NOT enter PIN! It is a scam.
+            </button>
+            <button type="button" class="btn btn-danger" data-safety-answer="wrong">
+              ❌ Enter PIN to get the money.
+            </button>
+          </div>
+
+          <div id="safetyQuizFeedback"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       MODALS
+       ========================================================= -->
+
+  <!-- Modal 1: Add / Edit Appointment -->
+  <div class="modal-overlay" id="appointmentModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">➕ Add Doctor Appointment</h3>
+        <button type="button" class="close-btn" id="closeAppModalHeaderBtn" aria-label="Close modal">✕</button>
+      </div>
+
+      <form id="appointmentForm">
+        <div class="form-group">
+          <label class="form-label" for="doctorNameInput">Doctor Name *</label>
+          <input type="text" class="form-control" id="doctorNameInput" placeholder="e.g. Dr. Ramesh Sharma" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="hospitalInput">Hospital or Clinic Name *</label>
+          <input type="text" class="form-control" id="hospitalInput" placeholder="e.g. Ruby Hall Hospital, Pune" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label class="form-label" for="appDateInput">Date *</label>
+            <input type="date" class="form-control" id="appDateInput" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="appTimeInput">Time *</label>
+            <input type="text" class="form-control" id="appTimeInput" placeholder="e.g. 11:30 AM" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="appReasonInput">Reason for Visit *</label>
+          <input type="text" class="form-control" id="appReasonInput" placeholder="e.g. Regular Heart & BP Checkup, Eye Test" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="appNotesInput">Notes / Reminders (Optional)</label>
+          <textarea class="form-control" id="appNotesInput" rows="3" placeholder="e.g. Fast for 10 hours for blood test, carry old ECG reports"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-lg" style="flex: 1;">
+            💾 Save Appointment
+          </button>
+          <button type="button" class="btn btn-secondary btn-lg" id="cancelAppModalBtn">
+            ✕ Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Appointment Details -->
+  <div class="modal-overlay" id="appointmentDetailsModal" role="dialog" aria-modal="true" aria-labelledby="detailsModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="detailsModalTitle">📋 Appointment Details</h3>
+        <button type="button" class="close-btn" id="closeDetailsHeaderBtn" aria-label="Close modal">✕</button>
+      </div>
+      <div id="detailsModalContent">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Delete Confirmation -->
+  <div class="modal-overlay" id="deleteConfirmModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="deleteModalTitle" style="color: var(--color-danger);">
+          ⚠️ Cancel Appointment?
+        </h3>
+        <button type="button" class="close-btn" onclick="AppointmentModule.closeModal('deleteConfirmModal')">✕</button>
+      </div>
+      <p style="font-size: 1.25rem; margin-bottom: 12px;">Are you sure you want to delete this appointment?</p>
+      <div id="deleteAppDescription" style="font-size: 1.15rem; font-weight: 750; color: var(--color-text-muted); background: var(--color-surface-soft); padding: 12px; border-radius: 8px; margin-bottom: 24px;"></div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-danger btn-lg" id="confirmDeleteBtn" style="flex: 1;">
+          🗑 Yes, Delete Appointment
+        </button>
+        <button type="button" class="btn btn-secondary btn-lg" id="cancelDeleteBtn">
+          ✕ No, Keep It
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Emergency Contacts Helpline -->
+  <div class="modal-overlay" id="emergencyModal" role="dialog" aria-modal="true" aria-labelledby="emergencyTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="emergencyTitle" style="color: var(--color-danger);">
+          🆘 Emergency Helplines
+        </h3>
+        <button type="button" class="close-btn" id="closeEmergencyModalBtn">✕</button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
+        <div style="background: #fee2e2; border: 2px solid #ef4444; padding: 16px; border-radius: 12px;">
+          <div style="font-size: 1rem; font-weight: 700; color: #7f1d1d;">MEDICAL AMBULANCE</div>
+          <div style="font-size: 1.8rem; font-weight: 900; color: #991b1b;">📞 108</div>
+          <div style="font-size: 1rem; color: #7f1d1d;">Free emergency ambulance service available 24/7</div>
+        </div>
+
+        <div style="background: #e0e7ff; border: 2px solid #6366f1; padding: 16px; border-radius: 12px;">
+          <div style="font-size: 1rem; font-weight: 700; color: #3730a3;">NATIONAL SENIOR CITIZEN HELPLINE</div>
+          <div style="font-size: 1.8rem; font-weight: 900; color: #312e81;">📞 14567</div>
+          <div style="font-size: 1rem; color: #3730a3;">Dedicated elderline for medical, emotional & emergency aid</div>
+        </div>
+
+        <div style="background: #fef3c7; border: 2px solid #f59e0b; padding: 16px; border-radius: 12px;">
+          <div style="font-size: 1rem; font-weight: 700; color: #78350f;">NATIONAL CYBER CRIME / UPI FRAUD</div>
+          <div style="font-size: 1.8rem; font-weight: 900; color: #92400e;">📞 1930</div>
+          <div style="font-size: 1rem; color: #78350f;">Report online banking fraud or unauthorized deductions</div>
+        </div>
+
+        <div style="background: #f1f5f9; border: 2px solid #94a3b8; padding: 16px; border-radius: 12px;">
+          <div style="font-size: 1rem; font-weight: 700; color: #334155;">FAMILY CONTACT (EMERGENCY)</div>
+          <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">📞 Rajesh (Son): 98765 43210</div>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-secondary btn-block btn-lg" onclick="document.getElementById('emergencyModal').classList.remove('active')">
+        ✕ Close Emergency Info
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Notification Alert Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <p><strong>ElderEase</strong> — Community Engagement Project (CEP) • Review 1 MVP</p>
+      <p>Designed with care for seniors: Large text, high contrast, simplicity first.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/calendar.js"></script>
+  <script src="/static/js/nutrition.js"></script>
+  <script src="/static/js/upi.js"></script>
+</body>
+</html>
